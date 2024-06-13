@@ -1,0 +1,65 @@
+
+GET http://localhost:5198/students
+
+###
+GET http://localhost:5198/students/2
+
+###
+POST http://localhost:5198/students
+Content-Type: application/json
+
+{
+    "Id": 2,
+    "Name": "Raza",
+    "RegNo": "007",
+    "FatherName": "Khan",
+    "DateOfBirth": "2007-06-02" 
+}
+
+###
+POST http://localhost:5198/students
+Content-Type: application/json
+
+{
+    "Name": "Abdullah",
+    "RegNo": "004",
+    "FatherName": "Ahmed",
+    "DateOfBirth": "2002-04-18" 
+}
+
+###
+POST http://localhost:5198/students
+Content-Type: application/json
+
+{
+    "Name": "Ali",
+    "RegNo": "009",
+    "FatherName": "Mirza",
+    "DateOfBirth": "2003-05-07" 
+}
+
+###
+POST http://localhost:5198/students
+Content-Type: application/json
+
+{
+    "Name": "Hamza",
+    "RegNo": "010",
+    "FatherName": "Jafar",
+    "DateOfBirth": "2001-09-23" 
+}
+
+###
+PUT http://localhost:5198/students/3
+Content-Type: application/json
+
+{
+    "Id": 3,
+    "Name": "Haider Ali",
+    "RegNo": "030",
+    "FatherName": "Jafar Ali",
+    "DateOfBirth": "2003-11-17"
+}
+
+###
+DELETE http://localhost:5198/students/15
