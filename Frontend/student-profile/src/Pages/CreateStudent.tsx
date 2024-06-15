@@ -1,12 +1,8 @@
 import StudentForm from "../Components/StudentForm"
 import axios from 'axios';
 import swal from 'sweetalert';
-import { useNavigate } from "react-router-dom";
 
 const CreateStudent = () => {
-
-  //navigate
-  const nav = useNavigate();
 
   //default values
   const values = {
@@ -19,13 +15,14 @@ const CreateStudent = () => {
   //handle create logic
   const handleAdd = (newStudent: object) => {
 
+    console.log(newStudent);
+
     axios.post(
       'http://localhost:5198/students',
       newStudent,
     )
       .then(() => {
         swal("Success!", "New student created successfully!", 'success');
-        nav("/");
       })
       .catch(err => {
         console.log(err);

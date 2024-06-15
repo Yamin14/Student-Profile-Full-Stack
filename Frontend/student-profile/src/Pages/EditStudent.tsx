@@ -1,14 +1,11 @@
 
-import { useNavigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import StudentForm from "../Components/StudentForm";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import swal from "sweetalert";
 
 const EditStudent = () => {
-
-  //navigate
-  const nav = useNavigate();
 
   //get id and student
   const { id } = useParams();
@@ -42,7 +39,6 @@ const EditStudent = () => {
     axios.put(url, updatedStudent)
       .then(() => {
         swal("Saved!", "Student has successfully been updated!", 'success');
-        nav("/");
       })
       .catch(err => {
         console.log(err);
@@ -53,12 +49,10 @@ const EditStudent = () => {
   //return
   return (
 
-    <form>
-      <StudentForm formHeading="Edit Student Data" 
+    <StudentForm formHeading="Edit Student Data" 
                     values={student}
                     btnLabel="Save"
                     onSubmit={handleEdit} />
-    </form>
 
   )
 }
