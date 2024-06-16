@@ -18,6 +18,9 @@ interface Props {
 //component
 const StudentForm = ({formHeading, values, btnLabel, onSubmit} : Props) => {
 
+  //errors
+  const [errors, setErrors] = useState({name: '', regNo: '', fatherName: '', dateOfBirth: ''});
+
   //default object
   const [student, setStudent] = useState(values);
 
@@ -27,48 +30,9 @@ const StudentForm = ({formHeading, values, btnLabel, onSubmit} : Props) => {
   
   //handle change
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+
     const { name, value } = event.target;
-
-    //validation
-    if (name === 'regNo') {
-
-      const isValid = /^\d{0,3}$/.test(value);
-
-      if (!isValid) {
-        setStudent({...student, [name]: ''});
-        alert("Registration number should only contain 3 digits.");
-      } else {
-        setStudent({...student, [name]: value});
-      }
-    }
-
-    if (name === 'name') {
-
-      const isValid = /^[a-zA-Z\s\b]*$/.test(value);
-
-      if (!isValid) {
-        setStudent({...student, [name]: ''});
-        alert("Name should contain a valid name.");
-      } else {
-        setStudent({...student, [name]: value});
-      }
-    }
-
-    if (name === 'fatherName') {
-
-      const isValid = /^[a-zA-Z\s\b]*$/.test(value);
-
-      if (!isValid) {
-        setStudent({...student, [name]: ''});
-        alert("Father's name should contain a valid name.");
-      } else {
-        setStudent({...student, [name]: value});
-      }
-    }
-
-    if (name === 'dateOfBirth') {
-      setStudent({...student, [name]: value});
-    }
+    setStudent({...student, [name]: value});
 
   }
 
@@ -76,16 +40,47 @@ const StudentForm = ({formHeading, values, btnLabel, onSubmit} : Props) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const minDate = '1990';
-    const maxDate = '2007';
-    const value = student.dateOfBirth.substring(0,4);
+    //validation
+    const validationErrors = {name: '', regNo: '', fatherName: '', dateOfBirth: ''};
+    const { name, regNo, fatherName, dateOfBirth } = student;
 
-    if ( value.substring(0, 4) < minDate || value.substring(0, 4) > maxDate) {
-      setStudent({...student, ["dateOfBirth"]: ''});
-      alert("Date of birth must be between the years 1990 and 2007.")
-    } else {
+    //name
+    if (!name.trim()) {
+      validationErrors.name = 'Name is required.'
+    } else if (!/^[a-zA-Z\s]+$/.test(name.trim())) {
+      validationErrors.name = 'Invalid name.'
+    }
+
+    //reg no
+    if (!regNo.trim()) {
+      validationErrors.regNo = 'Registration number is required.'
+    } else if (!/^\d{3}$/.test(regNo.trim())) {
+      validationErrors.regNo = 'Invalid registration number.'
+    }
+
+    //father name
+    if (!fatherName.trim()) {
+      validationErrors.fatherName = "Father's name is required."
+    } else if (!/^[a-zA-Z\s]+$/.test(fatherName.trim())) {
+      validationErrors.fatherName = "Invalid father's name."
+    }
+
+    //date of birth
+    if (!dateOfBirth) {
+      validationErrors.dateOfBirth = 'Date of birth is required.'
+    } else if (parseInt(dateOfBirth.slice(0, 4)) < 1990 || parseInt(dateOfBirth.slice(0,4)) > 2007) {
+      validationErrors.dateOfBirth = "Invalid date of birth. Must be between 1990 and 2007."
+    }
+
+    //result if valid
+    setErrors(validationErrors);
+    console.log(validationErrors)
+    if (validationErrors.name === '' && validationErrors.regNo === '' &&
+      validationErrors.fatherName === '' && validationErrors.dateOfBirth === ''
+    ) {
       onSubmit(student);
     }
+    
   }
 
   //return
@@ -99,32 +94,37 @@ const StudentForm = ({formHeading, values, btnLabel, onSubmit} : Props) => {
         <div className='entry text-center row'>
           <label className='col-sm-6 fw-bold'>Name:</label>
           <input className='col-sm-6 w-40' type='text' defaultValue={values.name} 
-                  name='name' placeholder="e.g. Yamin" minLength={2} maxLength={40}
-                  onChange={handleInput} required />
+                  name='name' placeholder="e.g. Yamin"
+                  onChange={handleInput} />
+          {errors.name && <span className="text-danger">{errors.name}</span>}
         </div>
 
         <div className='entry text-center row'>
           <label className='col-sm-6 fw-bold'>Reg No:</label>
           <input className='col-sm-6 w-40' type='text' defaultValue={values.regNo} 
-                  name='regNo' placeholder="e.g. 027" maxLength={3} minLength={3}
-                   onChange={handleInput} required />
+                  name='regNo' placeholder="e.g. 027"
+                   onChange={handleInput} />
+          {errors.regNo && <span className="text-danger">{errors.regNo}</span>}
         </div>
 
         <div className='entry text-center row'>
           <label className='col-sm-6 fw-bold'>Father's Name:</label>
           <input className='col-sm-6 w-40' type='text' defaultValue={values.fatherName} 
-                  name='fatherName' placeholder="e.g. Ali" minLength={2} maxLength={40}
-                  onChange={handleInput} required />
+                  name='fatherName' placeholder="e.g. Ali"
+                  onChange={handleInput} />
+          {errors.fatherName && <span className="text-danger">{errors.fatherName}</span>}
         </div>
 
         <div className='entry text-center row'>
           <label className='col-sm-6 fw-bold'>Date of Birth:</label>
           <input className='col-sm-6 w-40' type='date' defaultValue={values.dateOfBirth} 
-                  name='dateOfBirth' onChange={handleInput} required />
+                  name='dateOfBirth' onChange={handleInput} />
+          {errors.dateOfBirth && <span className="text-danger">{errors.dateOfBirth}</span>}
         </div>
 
-        <input type="submit" className='btn btn-primary'
-          value={btnLabel} />
+        <button type="submit" className='btn btn-primary'>
+          {btnLabel}
+        </button>
 
         <div>
           <NavLink className='btn btn-primary m-2' to='/'>Go to Home Page</NavLink>
